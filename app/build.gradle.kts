@@ -59,12 +59,16 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
 
-    implementation(platform("com.google.firebase:firebase-bom:31.1.1")) // Use the Firebase BOM for version management
-    implementation("com.google.firebase:firebase-storage-ktx")
-
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     implementation(libs.google.dagger.hilt)
     kapt(libs.google.dagger.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation("com.google.firebase:firebase-storage-ktx")
+
 
 
     implementation(libs.androidx.core.ktx)

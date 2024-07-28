@@ -5,17 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.tutorials.myapplication.ui.theme.MyApplicationTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+
+
 
 
 sealed class DestinationScreen(val route :String){
@@ -27,8 +27,8 @@ sealed class DestinationScreen(val route :String){
         fun createRoute(id:String)="singleChat/$id"
     }
     object StatusList:DestinationScreen("statusList")
-    object SingleStatus:DestinationScreen("singleStatus/{statusId}"){
-        fun createRoute(id:String)="singleStatus/$id"
+    object SingleStatus:DestinationScreen("singleStatus/{userId}"){
+        fun createRoute(userId:String?)="singleStatus/$userId"
     }
 }
 
@@ -36,7 +36,7 @@ sealed class DestinationScreen(val route :String){
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -50,28 +50,37 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ChatAppNavigation(){
     val navController= rememberNavController()
+    val vm=hiltViewModel<CAViewModel>()
 
-    NavHost(navController = navController, startDestination = DestinationScreen.Profile.route ){
+    NotificationMessage(vm = vm)
+    
+    NavHost(navController = navController, startDestination = DestinationScreen.Signup.route ){
         composable(DestinationScreen.Signup.route){
-            SignupScreen()
+            SignupScreen(navController,vm)
         }
         composable(DestinationScreen.Login.route){
-            LoginScreen()
+            LoginScreen(navController,vm)
         }
         composable(DestinationScreen.Profile.route){
-            ProfileScreen(navController=navController)
+            ProfileScreen(navController=navController,vm)
         }
         composable(DestinationScreen.StatusList.route){
-            StatusListScreen(navController=navController)
+            StatusListScreen(navController=navController,vm)
         }
         composable(DestinationScreen.SingleStatus.route){
-            SingleStatusScreen(statusId = "123")
+           val userId=it.arguments?.getString("userId")
+            userId?.let {
+               SingleStatusScreen(navController = navController, vm = vm, userId =userId )
+            }
         }
         composable(DestinationScreen.ChatList.route){
-            ChatListScreen(navController=navController)
+            ChatListScreen(navController=navController,vm)
         }
         composable(DestinationScreen.SingleChat.route){
-            SingleChatScreen(chatId = "123")
+            val chatId=it.arguments?.getString("chatId")
+            chatId?.let {
+                    SingleChatScreen(navController=navController,vm,chatId = it)
+            }
         }
     }
 }

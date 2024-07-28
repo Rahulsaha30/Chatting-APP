@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -24,12 +25,14 @@ enum class BottomNavigationItem (val icon:Int, val navDestionation:DestinationSc
 }
 
 @Composable
-fun BottomNavigationMenu(selectedItem:BottomNavigationItem, navController: NavController){
+fun BottomNavigationMenu(selectedItem:BottomNavigationItem, navController: NavController,modifier: Modifier){
     Row (modifier = Modifier
         .fillMaxWidth()
-        .padding(4.dp)
+        .padding(0.dp)
         .wrapContentHeight()
-        .background(Color.White))
+        .background(
+            Color.White
+        ))
     {
         for (item in BottomNavigationItem.values()){
             Image(painter = painterResource(id = item.icon), contentDescription =null,
@@ -38,7 +41,9 @@ fun BottomNavigationMenu(selectedItem:BottomNavigationItem, navController: NavCo
                     navigateTo(navController,item.navDestionation.route)
                 },
                 colorFilter =
-                if (item==selectedItem) ColorFilter.tint(Color.Black)
+                if (item==selectedItem) ColorFilter.tint(color = colorResource(
+                    id = R.color.Customdarkblue
+                ))
                 else ColorFilter.tint(
                     Color.Gray))
         }
