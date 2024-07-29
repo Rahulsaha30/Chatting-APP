@@ -32,7 +32,8 @@ data class ChatUser(
 data class  Message(
     val sentBy:String?="",
     val message:String?="",
-    val timestamp:String?=""
+    val timestamp:String?="",
+    val imageUrl: String?=""
 
 )
 

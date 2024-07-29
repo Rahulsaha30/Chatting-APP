@@ -64,7 +64,7 @@ fun ProfileScreen(navController: NavController, vm: CAViewModel) {
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(scrollState)
-                .padding(top = 33.dp),
+                .padding(top = 3.dp),
             vm = vm,
             name = name,
             number = number,

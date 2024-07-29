@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 
 sealed class DestinationScreen(val route :String){
+    object SplashScreen:DestinationScreen("splashscreen")
     object Signup:DestinationScreen("signup")
     object Login:DestinationScreen("login")
     object Profile:DestinationScreen("profile")
@@ -54,7 +55,10 @@ fun ChatAppNavigation(){
 
     NotificationMessage(vm = vm)
     
-    NavHost(navController = navController, startDestination = DestinationScreen.Signup.route ){
+    NavHost(navController = navController, startDestination = DestinationScreen.SplashScreen.route ){
+        composable(DestinationScreen.SplashScreen.route){
+         AnimatedSplashScreen(navController,vm)
+        }
         composable(DestinationScreen.Signup.route){
             SignupScreen(navController,vm)
         }
