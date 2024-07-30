@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
@@ -64,7 +66,7 @@ fun ProfileScreen(navController: NavController, vm: CAViewModel) {
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(scrollState)
-                .padding(top = 3.dp),
+                .padding(top = 3.dp).background(if (isSystemInDarkTheme())Color.Black else Color.White),
             vm = vm,
             name = name,
             number = number,
@@ -174,19 +176,17 @@ fun ProfileContent(
 
 
         CommonDivider()
-
-        Box(
-            modifier = Modifier
-                .background(
-                    color = colorResource(
-                        id = R.color.Customdarkblue
-                    )
-                )
-                .border(2.dp, Color.Black, RoundedCornerShape(4.dp))
-                .clickable { onLogout.invoke() }
-                .padding(8.dp)) {
-            Text(text = "LOG OUT",fontWeight = FontWeight.Bold,color = Color.White, fontSize = 20.sp)
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically) {
+            gradientbutton(text = "LOG OUT",
+                textColor = Color.White,
+                gradient = Brush.horizontalGradient(colors = listOf(Color.Cyan,Color.LightGray))){
+                onLogout.invoke()
+            }
         }
+
+
 
     }
 }

@@ -3,6 +3,7 @@ package eu.tutorials.myapplication
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +40,7 @@ fun SingleStatusScreen(navController: NavController, vm: CAViewModel, userId: St
         val currentStatus = remember { mutableStateOf(0) }
 
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+        Box(modifier = Modifier.fillMaxSize().background(if (isSystemInDarkTheme())Color.Black else Color.White)) {
             CommonImage(
                 data = statuses[currentStatus.value].imageUrl,
                 modifier = Modifier.fillMaxSize(),

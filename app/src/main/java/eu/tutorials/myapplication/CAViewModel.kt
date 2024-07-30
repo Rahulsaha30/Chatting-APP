@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -116,6 +117,27 @@ class CAViewModel @Inject constructor(
             }
     }
 
+    fun onForgotPassword(email: String) {
+        if (email.isEmpty()) {
+            handleException(customMessage = "Please enter your email")
+            return
+        }
+        inProgress.value = true
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    popupNotification.value = Event("Password reset email sent")
+                } else {
+                    handleException(task.exception, "Failed to send reset email")
+                }
+                inProgress.value = false
+            }
+            .addOnFailureListener { exception ->
+                handleException(exception, "Failed to send reset email")
+                inProgress.value = false
+            }
+    }
+
 
     private fun createorUpdateProfile(
         name: String? = null, number: String? = null,
@@ -180,6 +202,7 @@ class CAViewModel @Inject constructor(
         userData.value = null
         popupNotification.value = Event("Logged Out")
         chats.value = listOf()
+
     }
 
 

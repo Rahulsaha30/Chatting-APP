@@ -85,6 +85,11 @@ fun CheckSignedIn(vm:CAViewModel,navController: NavController) {
         navController.navigate(DestinationScreen.Profile.route) {
             popUpTo(0)
         }
+    }else if(!SignedIn && alreadySignedIn.value){
+        alreadySignedIn.value = false
+        navController.navigate(DestinationScreen.Login.route) {
+            popUpTo(0)
+        }
     }
 }
 

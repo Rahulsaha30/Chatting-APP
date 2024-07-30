@@ -126,11 +126,11 @@ fun ChatHeader(name: String, imageUrl: String, onBackClicked: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            Icons.AutoMirrored.Rounded.ArrowBack,
+            painter = painterResource(id = R.drawable.left),
             contentDescription = null,
             modifier = Modifier
                 .clickable { onBackClicked.invoke() }
-                .padding(10.dp)
+                .padding(10.dp).size(24.dp)
         )
         CommonImage(
             data = imageUrl,
@@ -230,7 +230,7 @@ fun ReplyBox(
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
+                    painter = painterResource(id = R.drawable.send2),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(24.dp)

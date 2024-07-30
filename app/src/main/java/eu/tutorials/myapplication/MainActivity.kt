@@ -14,8 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.tutorials.myapplication.ui.theme.MyApplicationTheme
 import androidx.hilt.navigation.compose.hiltViewModel
-
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 sealed class DestinationScreen(val route :String){
@@ -24,6 +23,7 @@ sealed class DestinationScreen(val route :String){
     object Login:DestinationScreen("login")
     object Profile:DestinationScreen("profile")
     object ChatList:DestinationScreen("chatList")
+    object ForgotPassword : DestinationScreen("forgot_password")
     object SingleChat:DestinationScreen("singleChat/{chatId}"){
         fun createRoute(id:String)="singleChat/$id"
     }
@@ -67,6 +67,9 @@ fun ChatAppNavigation(){
         }
         composable(DestinationScreen.Profile.route){
             ProfileScreen(navController=navController,vm)
+        }
+        composable(DestinationScreen.ForgotPassword.route) {
+            ForgotPasswordScreen(navController = navController, vm)
         }
         composable(DestinationScreen.StatusList.route){
             StatusListScreen(navController=navController,vm)

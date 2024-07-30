@@ -3,6 +3,8 @@ package eu.tutorials.myapplication
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,7 +60,7 @@ fun StatusListScreen(navController: NavController, vm: CAViewModel) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(it)
+                        .padding(it).background(if (isSystemInDarkTheme())Color.Black else Color.White)
                 ) {
                     TitleText(txt = "Status")
                     if (statuses.isEmpty())
