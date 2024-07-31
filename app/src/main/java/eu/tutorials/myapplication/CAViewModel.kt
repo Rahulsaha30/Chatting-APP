@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +30,7 @@ import java.lang.Exception
 import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
+
 
 @HiltViewModel
 class CAViewModel @Inject constructor(
@@ -57,6 +57,7 @@ class CAViewModel @Inject constructor(
     val inProgressStatus = mutableStateOf(false)
 
 
+
     init {
         //    onLogout()
         val currentUser = auth.currentUser
@@ -65,6 +66,8 @@ class CAViewModel @Inject constructor(
             getuserData(uid)
         }
     }
+
+
 
     fun onSignup(name: String, number: String, email: String, password: String) {
         if (name.isEmpty() or number.isEmpty() or email.isEmpty() or password.isEmpty()) {
@@ -239,55 +242,62 @@ class CAViewModel @Inject constructor(
     }
 
     fun onAddChat(number: String) {
-        if (number.isEmpty() or !number.isDigitsOnly())
+        if (number.isEmpty() || !number.isDigitsOnly()) {
             handleException(customMessage = "Please enter a valid number")
-        else {
-            db.collection(COLLECTION_USER).where(
-                Filter.or(
-                    Filter.and(
-                        Filter.equalTo("user1.number", number),
-                        Filter.equalTo("user2.number", userData.value?.number),
-                    ),
-                    Filter.and(
-                        Filter.equalTo("user1.number", userData.value?.number),
-                        Filter.equalTo("user2.number", number)
-                    )
-                )
-            ).get()
-                .addOnSuccessListener {
-                    if (it.isEmpty) {
-                        db.collection(COLLECTION_USER).whereEqualTo("number", number)
-                            .get().addOnSuccessListener {
-                                if (it.isEmpty) {
-                                    handleException(customMessage = "cannot retrieve user with number$number")
-                                } else {
-                                    val chatPartner = it.toObjects<UserData>()[0]
-                                    val id = db.collection(COLLECTION_CHAT).document().id
-                                    val chat = ChatData(
-                                        id,
-                                        ChatUser(
-                                            userData.value?.userId,
-                                            userData.value?.name,
-                                            userData.value?.number,
-                                            userData.value?.imageUrl
-                                        ),
-                                        ChatUser(
-                                            chatPartner.userId,
-                                            chatPartner.name,
-                                            chatPartner.number,
-                                            chatPartner.imageUrl
-                                        )
-                                    )
-                                    db.collection(COLLECTION_CHAT).document(id).set(chat)
-                                }
-                            }.addOnFailureListener { handleException(it) }
-                    } else {
-                        handleException(customMessage = "Chat already exists")
-                    }
-                }
-
+            return
         }
+
+        // Query the chat collection to check if a chat between the two users already exists
+        db.collection(COLLECTION_CHAT).where(
+            Filter.or(
+                Filter.and(
+                    Filter.equalTo("user1.number", number),
+                    Filter.equalTo("user2.number", userData.value?.number)
+                ),
+                Filter.and(
+                    Filter.equalTo("user1.number", userData.value?.number),
+                    Filter.equalTo("user2.number", number)
+                )
+            )
+        ).get()
+            .addOnSuccessListener { chatDocuments ->
+                if (chatDocuments.isEmpty) {
+                    // If no chat exists, proceed to check if the user with the provided number exists
+                    db.collection(COLLECTION_USER).whereEqualTo("number", number)
+                        .get().addOnSuccessListener { userDocuments ->
+                            if (userDocuments.isEmpty) {
+                                handleException(customMessage = "Cannot retrieve user with number $number")
+                            } else {
+                                val chatPartner = userDocuments.toObjects<UserData>()[0]
+                                val id = db.collection(COLLECTION_CHAT).document().id
+                                val chat = ChatData(
+                                    id,
+                                    ChatUser(
+                                        userData.value?.userId,
+                                        userData.value?.name,
+                                        userData.value?.number,
+                                        userData.value?.imageUrl
+                                    ),
+                                    ChatUser(
+                                        chatPartner.userId,
+                                        chatPartner.name,
+                                        chatPartner.number,
+                                        chatPartner.imageUrl
+                                    )
+                                )
+                                db.collection(COLLECTION_CHAT).document(id).set(chat)
+                            }
+                        }
+                        .addOnFailureListener { handleException(it) }
+                } else {
+                    // If a chat already exists, notify the user
+                    handleException(customMessage = "Chat already exists with this number")
+                }
+            }
+            .addOnFailureListener { handleException(it) }
     }
+
+
 
     private fun populateChats() {
         inProgressChats.value = true
@@ -388,8 +398,8 @@ class CAViewModel @Inject constructor(
             }
 
         }
-
     }
+
     fun onSendImage(chatId: String, imageUri: Uri) {
         viewModelScope.launch {
             try {
