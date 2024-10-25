@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
 
+    id("com.google.gms.google-services") // Google Services plugin
     kotlin("kapt")
     alias(libs.plugins.google.dagger.hilt)
 
@@ -62,8 +62,11 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
 
     implementation(libs.google.dagger.hilt)
+    implementation(libs.firebase.messaging)
     kapt(libs.google.dagger.hilt.compiler)
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+
 
 
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))

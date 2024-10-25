@@ -1,5 +1,6 @@
 package eu.tutorials.myapplication
 
+
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,7 +61,7 @@ fun StatusListScreen(navController: NavController, vm: CAViewModel) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(it).background(if (isSystemInDarkTheme())Color.Black else Color.White)
+                        .padding(it).background(  color = Color.White)
                 ) {
                     TitleText(txt = "Status")
                     if (statuses.isEmpty())
@@ -76,17 +77,17 @@ fun StatusListScreen(navController: NavController, vm: CAViewModel) {
                     else {
                         if (myStatuses.isNotEmpty()) {
 
-                                CommonRow(
-                                    imageUrl = myStatuses[0].user.imageUrl,
+                            CommonRow(
+                                imageUrl = myStatuses[0].user.imageUrl,
                                 name = myStatuses[0].user.name
-                                ) {
-                                    navigateTo(
-                                        navController,
-                                        DestinationScreen.SingleStatus.createRoute(myStatuses[0].user?.userId)
-                                    )
-                                }
-                            CommonDivider()
+                            ) {
+                                navigateTo(
+                                    navController,
+                                    DestinationScreen.SingleStatus.createRoute(myStatuses[0].user?.userId)
+                                )
                             }
+                            CommonDivider()
+                        }
                         val uniqueUsers = otherStatuses.map { it.user }.toSet().toList()
                         LazyColumn(modifier = Modifier.weight(1f)) {
                             items(uniqueUsers) { user ->
@@ -117,11 +118,9 @@ fun StatusListScreen(navController: NavController, vm: CAViewModel) {
 fun FAB(onFabClick: () -> Unit) {
     FloatingActionButton(
         onClick = onFabClick,
-        containerColor = colorResource(
-            id = R.color.Customdarkblue
-        ),
+        containerColor = Color(0xFFD8343F),
         shape = CircleShape,
-        modifier = Modifier.padding(bottom = 40.dp)
+        modifier = Modifier.padding(bottom = 80.dp)
     ) {
         Icon(
             imageVector = Icons.Rounded.Edit,

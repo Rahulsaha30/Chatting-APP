@@ -11,7 +11,7 @@
     <color name="grey_dark">#FF616161</color>
     <color name="grey_light">#FFBDBDBD</color>
     <color name="blue">#FF2196F3</color>
-    <color name="red">#FFEB5757</color>
+    <color name="red">#D8343F</color>
     <color name="green">#FF4CAF50</color>
     <color name="yellow">#FFFFEB3B</color>
     <color name="orange">#FFFF9800</color>
@@ -22,5 +22,13 @@
     <color name="custom_green">#008000</color>
     <color name="Customdarkblue">#187783</color>
     <color name="moredarkblue">#013A53</color>
-
+    <color name="buzzzred">#D8343F</color>1B1E25
+    <color name="bottombarblue">#1B1E25</color>
+    <color name="chatboxred">#F34F4E</color>
+    <color name="chatlistblue">#1F2229</color>
+    <color name="cardbottomblue">#232A32</color>
+    <color name="eachchatrednoti">#4C2021</color>
+    <color name="commonred">#D8343F</color>
+    <color name="mygrey">#7C626064</color>
+    <color name="textfieldgrey">#F5F5F5</color>
 </resources>

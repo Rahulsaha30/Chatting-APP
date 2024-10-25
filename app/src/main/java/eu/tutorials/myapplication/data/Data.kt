@@ -36,7 +36,6 @@ data class  Message(
     val imageUrl: String?=""
 
 )
-
 data class Status(
     val user: ChatUser=ChatUser(),
     val imageUrl: String?="",

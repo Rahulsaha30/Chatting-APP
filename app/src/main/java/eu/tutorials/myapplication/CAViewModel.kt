@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
@@ -240,7 +241,6 @@ class CAViewModel @Inject constructor(
             createorUpdateProfile(imageUrl = it.toString())
         }
     }
-
     fun onAddChat(number: String) {
         if (number.isEmpty() || !number.isDigitsOnly()) {
             handleException(customMessage = "Please enter a valid number")
@@ -298,7 +298,6 @@ class CAViewModel @Inject constructor(
     }
 
 
-
     private fun populateChats() {
         inProgressChats.value = true
         db.collection(COLLECTION_CHAT).where(
@@ -306,15 +305,15 @@ class CAViewModel @Inject constructor(
                 Filter.equalTo("user1.userId", userData.value?.userId),
                 Filter.equalTo("user2.userId", userData.value?.userId)
             )
-        ).addSnapshotListener { value, error ->
-            if (error != null)
-                handleException(error)
-            if (value != null)
-                chats.value = value.documents.mapNotNull { it.toObject<ChatData>() }
-            inProgressChats.value = false
-        }
+        )
+            .addSnapshotListener { value, error ->
+                if (error != null)
+                    handleException(error)
+                if (value != null)
+                    chats.value = value.documents.mapNotNull { it.toObject<ChatData>() }
+                inProgressChats.value = false
+            }
     }
-
     fun onSendReply(chatId: String, message: String) {
         val time = Calendar.getInstance().time.toString()
         val msg = Message(userData.value?.userId, message, time)
@@ -342,7 +341,6 @@ class CAViewModel @Inject constructor(
         chatMessages.value = listOf()
         currentChatMessagesListener = null
     }
-
 
     private fun createStatus(imageUrl: String?) {
         val newStatus = Status(

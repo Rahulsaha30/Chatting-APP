@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -59,8 +61,11 @@ fun ChatListScreen(navController: NavController, vm: CAViewModel) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(it).background(if (isSystemInDarkTheme())Color.Black else Color.White)
-                ) {
+                        .padding(it)
+                        .background(
+                          color = Color.White
+                        )
+                ){
                     TitleText(txt = "Chats")
 
                     if (chats.isEmpty())
@@ -95,8 +100,8 @@ fun ChatListScreen(navController: NavController, vm: CAViewModel) {
 
                     BottomNavigationMenu(
                         selectedItem = BottomNavigationItem.CHATLIST,
-                        navController = navController
-                        , modifier = Modifier
+                        navController = navController,
+                        modifier = Modifier
                     )
                 }
             }
@@ -137,11 +142,11 @@ fun FAB(
 
     FloatingActionButton(
         onClick = onFabClick,
-        containerColor =  colorResource(
-            id = R.color.Customdarkblue
-        ),
+        containerColor =
+        colorResource(id = R.color.commonred)
+        ,
         shape = CircleShape,
-        modifier = Modifier.padding(bottom = 40.dp)
+        modifier = Modifier.padding(bottom = 80.dp)
     ) {
         Icon(
             imageVector = Icons.Rounded.Add,
